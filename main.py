@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 
 from .models import models, schemas
-from .controllers import sandwiches, recipes, resources, order_details
+from .controllers import sandwiches, recipes, resources, order_details, orders
 from .dependencies.database import engine, get_db
 
 models.Base.metadata.create_all(bind=engine)
@@ -75,7 +75,7 @@ def update_one_order(sandwich_id: int, order: schemas.SandwichUpdate, db: Sessio
     sandwich_db = sandwiches.read_one(db, sandwich_id=sandwich_id)
     if sandwich_db is None:
         raise HTTPException(status_code=404, detail="User not found")
-    return sandwiches.update(db=db, sandwich=sandwich, sandwich_id=sandwich_id)
+    return sandwiches.update(db=db, sandwich=order, sandwich_id=sandwich_id)
 
 
 @app.delete("/sandwiches/{sandwich_id}", tags=["Sandwiches"])
